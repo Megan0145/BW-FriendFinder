@@ -14,5 +14,5 @@ function add(user) {
 }
 
 function findById(id) {
-  return db("users").where({ id });
+  return db("users").where({ user_id : id });
 }
