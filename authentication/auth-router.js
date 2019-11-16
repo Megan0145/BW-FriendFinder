@@ -23,4 +23,26 @@ router.post("/register", validateUser, (req, res) => {
     });
 });
 
+router.post("/login", validateUser, (req, res) => {
+  const { username, password } = req.body;
+  users
+    .findByUsername(username)
+    .then(user => {
+      if (user) {
+        res
+          .status(200)
+          .json({ message: `Welcome back ${user.username}!`, user });
+      } else {
+        res
+          .status(401)
+          .json({
+            message: "Could not find user. Invalid credentials provided"
+          });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Could not login user: " + err.message });
+    });
+});
+
 module.exports = router;
