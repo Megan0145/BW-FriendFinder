@@ -28,7 +28,7 @@ router.post("/login", validateUser, (req, res) => {
   users
     .findByUsername(username)
     .then(user => {
-      if (user) {
+      if (user && bcrypt.compareSync(password, user.password)) {
         res
           .status(200)
           .json({ message: `Welcome back ${user.username}!`, user });
