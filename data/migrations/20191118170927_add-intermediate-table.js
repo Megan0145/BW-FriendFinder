@@ -6,19 +6,19 @@ exports.up = function(knex) {
       .notNullable()
       .unsigned()
       .references("id")
-      ,inTable("users");
+      .inTable("users");
     tbl
       .integer("question_id")
       .notNullable()
       .unsigned()
       .references("id")
-      ,inTable("question");
+      .inTable("question");
     tbl
       .integer("answer_id")
       .unsigned()
       .notNullable()
       .references("id")
-      ,inTable("answers");
+      .inTable("answers");
   });
 };
 
