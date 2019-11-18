@@ -8,14 +8,14 @@ module.exports = {
 
 function add(user) {
   return db("users")
-    .insert(user)
+    .insert(user, id)
     .then(ids => {
       return findById(ids[0]);
     });
 }
 
 function findById(id) {
-  return db("users").where({ User_id, id});
+  return db("users").where({ user_id: id});
 }
 
 function findByUsername(username) {
