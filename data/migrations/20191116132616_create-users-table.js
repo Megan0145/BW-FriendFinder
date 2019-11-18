@@ -9,7 +9,7 @@ exports.up = function(knex) {
     tbl.string("fname", 128);
     tbl.string("lname", 128);
     tbl.string("avatar_url", 128);
-    tbl.decimal("age");
+    tbl.string("DOB");
   });
 };
 
