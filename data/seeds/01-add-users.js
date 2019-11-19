@@ -15,7 +15,11 @@ exports.seed = function(knex) {
         { username: 'Samuel', password: '1234' },
         { username: 'Justinas', password: '1234' },
         { username: 'Ayomide', password: '1234' },
-        { username: 'Tolu', password: '1234' }
+        { username: 'Tolu', password: '1234' },
+        { username: 'Sarah', password: '1234' },
+        { username: 'Derek', password: '1234' },
+        { username: 'Tony', password: '1234' },
+        { username: 'Conor', password: '1234' }
       ]);
     });
 };

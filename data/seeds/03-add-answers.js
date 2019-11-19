@@ -1,10 +1,10 @@
-
 exports.seed = function(knex) {
   // Deletes ALL existing entries
-  return knex('answers').truncate()
-    .then(function () {
+  return knex("answers")
+    .truncate()
+    .then(function() {
       // Inserts seed entries
-      return knex('answers').insert([
+      return knex("answers").insert([
         { answer: 'tea' },
         { answer: 'coffee' },
         { answer: 'Tesla' },
@@ -30,6 +30,10 @@ exports.seed = function(knex) {
         { answer: 'outdoors' },
         { answer: 'early' },
         { answer: 'late' },
+        { answer: 'running' },
+        { answer: 'swimming' },
+        { answer: 'Scuba Diving' },
+        { answer: 'Sky diving' },
       ]);
     });
 };
