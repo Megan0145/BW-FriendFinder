@@ -3,7 +3,7 @@ const db = require("../data/db-config");
 module.exports = {
   findUsers,
   findUserById,
-  findMessagesByUserId,
+  findReceivedMessagesByUserId,
   sendMessage
 };
 
@@ -17,7 +17,7 @@ function findUserById(id) {
     .first();
 }
 
-function findMessagesByUserId(id) {
+function findReceivedMessagesByUserId(id) {
   return db("messages as m")
     .join("users as u", "m.sender_id", "u.id")
     .select(
@@ -31,4 +31,8 @@ function findMessagesByUserId(id) {
 
 function sendMessage(message) {
   return db("messages").insert(message);
+}
+
+function findSentMessagesByUserId(id) {
+    
 }
