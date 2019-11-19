@@ -4,6 +4,7 @@ module.exports = {
   findUsers,
   findUserById,
   findReceivedMessagesByUserId,
+  findSentMessagesByUserId,
   sendMessage
 };
 
@@ -33,6 +34,23 @@ function sendMessage(message) {
   return db("messages").insert(message);
 }
 
+// SELECT m.sender_id AS sender_id,
+//        m.receiver_id,
+//        u.username AS receiver_username,
+//        m.message
+//   FROM messages AS m
+//        JOIN
+//        users AS u ON m.receiver_id = u.id
+//  WHERE m.sender_id = 1;
+
 function findSentMessagesByUserId(id) {
-    
+  return db("messages as m")
+    .join("users as u", "m.receiver_id", "u.id")
+    .select(
+      "m.sender_id AS sender_id",
+      "m.receiver_id",
+      "u.username AS receiver_username",
+      "m.message"
+    )
+    .where("m.sender_id", id);
 }
