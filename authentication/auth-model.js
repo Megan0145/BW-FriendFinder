@@ -1,12 +1,12 @@
 const db = require("../data/db-config");
 
 module.exports = {
-  findById,
-  add,
-  findByUsername
+  findUserById,
+  addUser,
+  findUserByUsername
 };
 
-function add(user) {
+function addUser(user) {
   return db("users")
     .insert(user, "id")
     .then(ids => {
@@ -14,10 +14,10 @@ function add(user) {
     });
 }
 
-function findById(id) {
+function findUserById(id) {
   return db("users").where({ id }).first();
 }
 
-function findByUsername(username) {
+function findUserByUsername(username) {
     return db("users").where({ username }).first();
 }

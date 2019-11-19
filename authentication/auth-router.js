@@ -13,7 +13,7 @@ router.post("/register", validateUser, (req, res) => {
   };
 
   users
-    .add(newUser)
+    .addUser(newUser)
     .then(user => {
       res.status(201).json({ message: "Account created!", user });
     })
@@ -27,7 +27,7 @@ router.post("/register", validateUser, (req, res) => {
 router.post("/login", validateUser, (req, res) => {
   const { username, password } = req.body;
   users
-    .findByUsername(username)
+    .findUserByUsername(username)
     .then(user => {
       if (user && bcrypt.compareSync(password, user.password)) {
         const token = generateToken(user);
