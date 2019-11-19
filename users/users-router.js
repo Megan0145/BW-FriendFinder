@@ -27,4 +27,17 @@ router.get("/:id", (req, res) => {
     });
 });
 
+router.get("/:id/messages", (req, res) => {
+  users
+    .findMessagesByUserId(req.params.id)
+    .then(messages => {
+      res.status(200).json(messages);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not get messages: " + err.message });
+    });
+});
+
 module.exports = router;
