@@ -3,7 +3,7 @@ const users = require("./users-model");
 
 router.get("/", (req, res) => {
   users
-    .find()
+    .findUsers()
     .then(users => {
       res.status(200).json(users);
     })

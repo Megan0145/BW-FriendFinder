@@ -1,9 +1,9 @@
 const db = require("../data/db-config");
 
 module.exports = {
-    find
+    findUsers
 }
 
-function find(){
+function findUsers(){
     return db("users")
 }
