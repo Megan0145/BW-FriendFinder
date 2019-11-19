@@ -3,7 +3,8 @@ const db = require("../data/db-config");
 module.exports = {
   findUsers,
   findUserById,
-  findMessagesByUserId
+  findMessagesByUserId,
+  sendMessage
 };
 
 function findUsers() {
@@ -26,4 +27,8 @@ function findMessagesByUserId(id) {
       "m.message"
     )
     .where("m.receiver_id", id);
+}
+
+function sendMessage(message) {
+  return db("messages").insert(message);
 }

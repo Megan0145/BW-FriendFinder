@@ -40,4 +40,19 @@ router.get("/:id/messages", (req, res) => {
     });
 });
 
+router.post("/:id/messages", (req, res) => {
+  const sender_id = req.params.id;
+  const { receiver_id, message } = req.body;
+  users
+    .sendMessage({ sender_id, receiver_id, message })
+    .then(() => {
+      res.status(200).json({ message: "Message sent successfully" });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not send message: " + err.message });
+    });
+});
+
 module.exports = router;
