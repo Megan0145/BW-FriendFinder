@@ -12,7 +12,7 @@ exports.up = function(knex) {
       .notNullable()
       .unsigned()
       .references("id")
-      .inTable("question");
+      .inTable("questions");
     tbl
       .integer("answer_id")
       .unsigned()
@@ -23,5 +23,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-    return knex.schema.dropTableIfExists("user-answers");
+    return knex.schema.dropTableIfExists("user_answers");
 };

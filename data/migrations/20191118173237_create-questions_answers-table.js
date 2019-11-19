@@ -7,13 +7,13 @@ exports.up = function(knex) {
           .notNullable()
           .unsigned()
           .references("id")
-          .inTable("question");
+          .inTable("questions")
         tbl
           .integer("answer_id")
           .unsigned()
           .notNullable()
           .references("id")
-          .inTable("answers");
+          .inTable("answers")
       });
 };
 
