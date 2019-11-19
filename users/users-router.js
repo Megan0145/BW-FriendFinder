@@ -12,4 +12,19 @@ router.get("/", (req, res) => {
     });
 });
 
+router.get("/:id", (req, res) => {
+  users
+    .findUserById(req.params.id)
+    .then(user => {
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(401).json({ message: "Could not find user" });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Could not get user: " + err.message });
+    });
+});
+
 module.exports = router;
