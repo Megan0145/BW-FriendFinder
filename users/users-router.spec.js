@@ -43,4 +43,22 @@ describe("Users router", () => {
         .expect(200);
     });
   });
+
+  describe("[GET] /:id/messages endpoint", () => {
+    test("Should not return user's messages if no token provided", () => {
+      return request(server)
+        .get("/api/users/1/messages")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should return user's messages if valid token provided", () => {
+      return request(server)
+        .get("/api/users/1/messages")
+        .set(
+          "Authorization",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoxOSwidXNlcm5hbWUiOiJtZWdhbiIsImlhdCI6MTU3NDI2OTUzNCwiZXhwIjoxNTc0MzU1OTM0fQ.mckdVqdZd8KfbKnvIJEK4ngDqwOuOt_2zics4rDLLiw"
+        )
+        .expect(200);
+    });
+  });
 });
