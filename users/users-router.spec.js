@@ -71,4 +71,19 @@ describe("Users router", () => {
         .expect(200);
     });
   });
+
+  describe("[POST] /:id/messages/ endpoint", () => {
+    test("Should not allow user to send messages if no token provided", () => {
+      return request(server)
+        .post("/api/users/1/messages")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should not allow user to send messages if valid token but incorrect request body provided", async () => {
+      await request(server)
+        .post("/api/users/1/messages")
+        .set("Authorization", token)
+        .expect(500);
+    });
+  });
 });
