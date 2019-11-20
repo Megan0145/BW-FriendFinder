@@ -26,21 +26,21 @@ describe("Users router", () => {
     });
   });
 
-  describe("[POST] /login endpoint", () => {
-    // test("Login endpoint returns 401 when no credentials provided", () => {
-    //   return request(server)
-    //     .post("/api/auth/login")
-    //     .expect(401)
-    //     .expect({ message: "Missing user data" });
-    // });
-    // test("Login endpoint returns 201 when valid credentials provided", async () => {
-    //   await request(server)
-    //     .post("/api/auth/register")
-    //     .send({ username: "Testing", password: "1234" });
-    //   const loginResponse = await request(server)
-    //     .post("/api/auth/login")
-    //     .send({ username: "Testing", password: "1234" });
-    //   expect(loginResponse.status).toBe(200);
-    // });
+  describe("[GET] /:id endpoint", () => {
+    test("Should not return user by id if no token provided", () => {
+      return request(server)
+        .get("/api/users/1")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should return user by id if valid token provided", () => {
+      return request(server)
+        .get("/api/users/1")
+        .set(
+          "Authorization",
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWJqZWN0IjoxOSwidXNlcm5hbWUiOiJtZWdhbiIsImlhdCI6MTU3NDI2OTUzNCwiZXhwIjoxNTc0MzU1OTM0fQ.mckdVqdZd8KfbKnvIJEK4ngDqwOuOt_2zics4rDLLiw"
+        )
+        .expect(200);
+    });
   });
 });
