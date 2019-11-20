@@ -41,7 +41,6 @@ function findSentMessagesByUserId(id) {
   return db("messages as m")
     .join("users as u", "m.receiver_id", "u.id")
     .select(
-      "m.sender_id AS sender_id",
       "m.receiver_id",
       "u.username AS receiver_username",
       "m.message"
