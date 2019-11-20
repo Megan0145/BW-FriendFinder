@@ -89,8 +89,9 @@ router.post("/:id/questions", (req, res) => {
 router.post("/:id/messages", (req, res) => {
   const sender_id = req.params.id;
   const { receiver_id, message } = req.body;
+  const message = { sender_id, receiver_id, message }
   users
-    .sendMessage({ sender_id, receiver_id, message })
+    .sendMessage(message)
     .then(() => {
       res.status(200).json({ message: "Message sent successfully" });
     })
