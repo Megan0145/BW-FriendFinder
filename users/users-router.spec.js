@@ -56,4 +56,19 @@ describe("Users router", () => {
         .expect(200);
     });
   });
+
+  describe("[GET] /:id/messages/sent endpoint", () => {
+    test("Should not return user's sent messages if no token provided", () => {
+      return request(server)
+        .get("/api/users/1/messages/sent")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should return user's sent messages if valid token provided", async () => {
+      await request(server)
+        .get("/api/users/1/messages/sent")
+        .set("Authorization", token)
+        .expect(200);
+    });
+  });
 });
