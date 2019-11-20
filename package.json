@@ -4,9 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "test": "cross-env DB_ENV=testing jest --watchAll",
     "server": "nodemon index.js",
-    "start": "node index.js",
-    "test": "cross-env DB_ENV=testing NODE_ENV=testing jest --watchAll"
+    "start": "node index.js"
   },
   "jest": {
     "testEnvironment": "node"
