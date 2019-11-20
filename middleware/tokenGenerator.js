@@ -4,6 +4,7 @@ require("dotenv").config();
 function generateToken(user) {
   const payload = {
     subject: user.id,
+    //remove
     username: user.username
   };
 

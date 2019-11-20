@@ -55,14 +55,16 @@ router.get("/:id/messages/sent", (req, res) => {
 
 router.get("/:id/questions", async (req, res) => {
   try {
-    const question = await users.findUnansweredQuestionsByUserId(req.decodedToken.subject);
+    const question = await users.findUnansweredQuestionsByUserId(
+      req.decodedToken.subject
+    );
     const answers = await users.findQuestionAnswers(req.decodedToken.subject);
     const result = { ...question, answers };
     res.json(result);
   } catch (err) {
     res
       .status(500)
-      .json({ message: 'Could not get questions: ' + err.message });
+      .json({ message: "Could not get questions: " + err.message });
   }
 });
 
@@ -83,7 +85,7 @@ router.post("/:id/questions", (req, res) => {
 router.post("/:id/messages", (req, res) => {
   const sender_id = req.decodedToken.subject;
   const { receiver_id, message } = req.body;
-  const messageBody = { sender_id, receiver_id, message }
+  const messageBody = { sender_id, receiver_id, message };
   users
     .sendMessage(messageBody)
     .then(() => {
@@ -100,10 +102,10 @@ router.get("/:id/matches", (req, res) => {
   users
     .findMatches(req.decodedToken.subject)
     .then(matches => {
-      if(process.env.DB_ENV === 'production') {
+      if (process.env.DB_ENV === "production") {
         res.status(200).json(matches.rows);
       } else {
-        res.status(200).json(matches)
+        res.status(200).json(matches);
       }
     })
     .catch(err => {
