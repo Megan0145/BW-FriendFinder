@@ -55,9 +55,15 @@ router.get("/:id/messages/sent", (req, res) => {
 
 router.get("/:id/questions", (req, res) => {
   users
-    .findUnansweredQuestions(req.params.id)
+    .findUnansweredQuestionsByUserId(req.params.id)
     .then(questions => {
-      res.status(200).json(questions);
+      if (!questions.length) {
+        res
+          .status(200)
+          .json({ message: "You have no questions left to answer" });
+      } else {
+        res.status(200).json(questions);
+      }
     })
     .catch(err => {
       res

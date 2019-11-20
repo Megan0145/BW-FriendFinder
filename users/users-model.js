@@ -6,7 +6,7 @@ module.exports = {
   findReceivedMessagesByUserId,
   findSentMessagesByUserId,
   sendMessage,
-  findUnansweredQuestions,
+  findUnansweredQuestionsByUserId,
   findAnsweredQuestions,
   findMatches
 };
@@ -49,20 +49,22 @@ function findSentMessagesByUserId(id) {
     .where("m.sender_id", id);
 }
 
-function findUnansweredQuestions(id) {
-  return db("questions as q")
-    .leftJoin("user_answers as ua", "q.id", "ua.question_id")
-    .andWhere("ua.user_id", id)
-    .leftJoin("question_answers as qa", "q.id", "qa.question_id")
-    .leftJoin("answers as a", "qa.answer_id", "a.id")
-    .select(
-      "q.id as question_id",
-      "q.question",
-      "a.id as answer_id",
-      "a.answer"
-    )
-    .where("ua.answer_id", null);
-}
+function findUnansweredQuestionsByUserId(id) {
+    return db
+      .select(
+        'q.id as question_id',
+        'q.question as question',
+        'a.id as answer_id',
+        'a.answer as answer'
+      )
+      .from('questions as q')
+      .leftJoin('question_answers as qa', 'qa.question_id', 'q.id')
+      .leftJoin('answers as a', 'a.id', 'qa.answer_id')
+      .leftJoin('user_answers as ua', function() {
+        this.on('ua.question_id', 'q.id').on('ua.user_id', db.raw(id));
+      })
+      .whereNull('ua.user_id');
+  }
 
 function findAnsweredQuestions(id) {
   return db("user_answers as ua")
