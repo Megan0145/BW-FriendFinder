@@ -20,5 +20,11 @@ describe("server", () => {
         .expect(401)
         .expect({"message":"Missing user data"});
     });
+    test("Register endpoint returns 201 when valid credentials provided", () => {
+        return request(server)
+          .post("/api/auth/register")
+          .send({ username: "Testing", password: "1234" })
+          .expect(201);
+      });
   });
 });
