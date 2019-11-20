@@ -88,6 +88,7 @@ function findQuestionAnswers(id) {
 function findMatches(id) {
   return db.raw(`SELECT 
 ouA.user_id AS potentialFriendID,
+u.username,
 count( * ) AS match_probability
 FROM (
     SELECT ua.user_id,
@@ -107,8 +108,9 @@ JOIN
 )
 AS ouA ON liA.question_id = ouA.question_id AND 
           liA.answer_id = ouA.answer_id
+          JOIN users as u on ouA.user_id = u.id
 GROUP BY liA.user_id,
-   ouA.user_id
+   ouA.user_id, u.username
 HAVING count( * ) > 5
 ORDER BY count( * ) DESC;`);
 }
