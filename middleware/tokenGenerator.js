@@ -3,7 +3,7 @@ require("dotenv").config();
 
 function generateToken(user) {
   const payload = {
-    subject: user.user_id,
+    subject: user.id,
     username: user.username
   };
 

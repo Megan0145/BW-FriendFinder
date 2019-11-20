@@ -29,7 +29,7 @@ router.get("/:id", (req, res) => {
 
 router.get("/:id/messages", (req, res) => {
   users
-    .findReceivedMessagesByUserId(req.params.id)
+    .findReceivedMessagesByUserId(req.decodedToken.subject)
     .then(messages => {
       res.status(200).json(messages);
     })
@@ -42,7 +42,7 @@ router.get("/:id/messages", (req, res) => {
 
 router.get("/:id/messages/sent", (req, res) => {
   users
-    .findSentMessagesByUserId(req.params.id)
+    .findSentMessagesByUserId(req.decodedToken.subject)
     .then(messages => {
       res.status(200).json(messages);
     })
@@ -53,27 +53,21 @@ router.get("/:id/messages/sent", (req, res) => {
     });
 });
 
-router.get("/:id/questions", (req, res) => {
-  users
-    .findUnansweredQuestionsByUserId(req.params.id)
-    .then(questions => {
-      if (!questions.length) {
-        res
-          .status(200)
-          .json({ message: "You have no questions left to answer" });
-      } else {
-        res.status(200).json(questions);
-      }
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ message: "Could not get questions: " + err.message });
-    });
+router.get("/:id/questions", async (req, res) => {
+  try {
+    const question = await users.findUnansweredQuestionsByUserId(req.decodedToken.subject);
+    const answers = await users.findQuestionAnswers(req.decodedToken.subject);
+    const result = { ...question, answers };
+    res.json(result);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: 'Could not get questions: ' + err.message });
+  }
 });
 
 router.post("/:id/questions", (req, res) => {
-  const user_id = req.params.id;
+  const user_id = req.decodedToken.subject;
   const { question_id, answer_id } = req.body;
   const answer = { user_id, question_id, answer_id };
   users
@@ -87,7 +81,7 @@ router.post("/:id/questions", (req, res) => {
 });
 
 router.post("/:id/messages", (req, res) => {
-  const sender_id = req.params.id;
+  const sender_id = req.decodedToken.subject;
   const { receiver_id, message } = req.body;
   const messageBody = { sender_id, receiver_id, message }
   users
@@ -104,9 +98,9 @@ router.post("/:id/messages", (req, res) => {
 
 router.get("/:id/matches", (req, res) => {
   users
-    .findMatches(req.params.id)
+    .findMatches(req.decodedToken.subject)
     .then(matches => {
-      res.status(200).json(matches.rows);
+      res.status(200).json(matches);
     })
     .catch(err => {
       res
