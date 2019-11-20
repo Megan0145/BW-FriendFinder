@@ -100,7 +100,11 @@ router.get("/:id/matches", (req, res) => {
   users
     .findMatches(req.decodedToken.subject)
     .then(matches => {
-      res.status(200).json(matches);
+      if(process.env.DB_ENV === 'production') {
+        res.status(200).json(matches.rows);
+      } else {
+        res.status(200).json(matches)
+      }
     })
     .catch(err => {
       res
