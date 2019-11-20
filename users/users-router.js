@@ -53,6 +53,19 @@ router.get("/:id/messages/sent", (req, res) => {
     });
 });
 
+router.get("/:id/questions", (req, res) => {
+  users
+    .findUnansweredQuestions(req.params.id)
+    .then(questions => {
+      res.status(200).json(questions);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not get questions: " + err.message });
+    });
+});
+
 router.post("/:id/messages", (req, res) => {
   const sender_id = req.params.id;
   const { receiver_id, message } = req.body;
@@ -65,6 +78,19 @@ router.post("/:id/messages", (req, res) => {
       res
         .status(500)
         .json({ message: "Could not send message: " + err.message });
+    });
+});
+
+router.get("/:id/matches", (req, res) => {
+  users
+    .findMatches(req.params.id)
+    .then(matches => {
+      res.status(200).json(matches);
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not get matches: " + err.message });
     });
 });
 
