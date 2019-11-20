@@ -106,7 +106,7 @@ router.get("/:id/matches", (req, res) => {
   users
     .findMatches(req.params.id)
     .then(matches => {
-      res.status(200).json(matches);
+      res.status(200).json(matches.rows);
     })
     .catch(err => {
       res
