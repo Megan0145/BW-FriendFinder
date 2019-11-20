@@ -72,6 +72,20 @@ router.get("/:id/questions", (req, res) => {
     });
 });
 
+router.post("/:id/questions", (req, res) => {
+  const user_id = req.params.id;
+  const { question_id, answer_id } = req.body;
+  const answer = { user_id, question_id, answer_id };
+  users
+    .addAnswer(answer)
+    .then(success => {
+      res.status(201).json({ message: "Answer submitted", answer });
+    })
+    .catch(err => {
+      res.status(500).json({ message: "Cannot submit answer: " + err.message });
+    });
+});
+
 router.post("/:id/messages", (req, res) => {
   const sender_id = req.params.id;
   const { receiver_id, message } = req.body;
