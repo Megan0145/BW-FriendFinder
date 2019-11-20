@@ -46,6 +46,7 @@ describe("Auth router", () => {
         .post("/api/auth/login")
         .send({ username: "Testing", password: "1234" });
       expect(loginResponse.status).toBe(200);
+      expect(JSON.parse(loginResponse.res.text).token)
     });
   });
 });
