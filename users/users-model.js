@@ -10,7 +10,8 @@ module.exports = {
   findAnsweredQuestions,
   findMatches,
   addAnswer,
-  findQuestionAnswers
+  findQuestionAnswers,
+  updateUser
 };
 
 function findUsers() {
@@ -26,11 +27,7 @@ function findUserById(id) {
 function findReceivedMessagesByUserId(id) {
   return db("messages as m")
     .join("users as u", "m.sender_id", "u.id")
-    .select(
-      " u.id AS sender_id",
-      "u.username AS sender_username",
-      "m.message"
-    )
+    .select(" u.id AS sender_id", "u.username AS sender_username", "m.message")
     .where("m.receiver_id", id);
 }
 
@@ -41,22 +38,18 @@ function sendMessage(message) {
 function findSentMessagesByUserId(id) {
   return db("messages as m")
     .join("users as u", "m.receiver_id", "u.id")
-    .select(
-      "m.receiver_id",
-      "u.username AS receiver_username",
-      "m.message"
-    )
+    .select("m.receiver_id", "u.username AS receiver_username", "m.message")
     .where("m.sender_id", id);
 }
 
 function findUnansweredQuestionsByUserId(id) {
-    return db
-    .select('q.id as question_id', 'q.question as question')
-    .from('questions as q')
-    .leftJoin('user_answers as ua', function() {
-      this.on('ua.question_id', 'q.id').on('ua.user_id', db.raw(id));
+  return db
+    .select("q.id as question_id", "q.question as question")
+    .from("questions as q")
+    .leftJoin("user_answers as ua", function() {
+      this.on("ua.question_id", "q.id").on("ua.user_id", db.raw(id));
     })
-    .whereNull('ua.user_id')
+    .whereNull("ua.user_id")
     .first();
 }
 
@@ -69,21 +62,21 @@ function findAnsweredQuestions(id) {
 }
 
 function findQuestionAnswers(id) {
-    return db('question_answers')
-      .where(
-        'question_answers.question_id',
-        db
-          .select('q.id as question_id')
-          .from('questions as q')
-          .leftJoin('user_answers as ua', function() {
-            this.on('ua.question_id', 'q.id').on('ua.user_id', db.raw(id));
-          })
-          .whereNull('ua.user_id')
-          .first()
-      )
-      .join('answers', 'question_answers.answer_id', 'answers.id')
-      .select('answers.*');
-  }
+  return db("question_answers")
+    .where(
+      "question_answers.question_id",
+      db
+        .select("q.id as question_id")
+        .from("questions as q")
+        .leftJoin("user_answers as ua", function() {
+          this.on("ua.question_id", "q.id").on("ua.user_id", db.raw(id));
+        })
+        .whereNull("ua.user_id")
+        .first()
+    )
+    .join("answers", "question_answers.answer_id", "answers.id")
+    .select("answers.*");
+}
 
 function findMatches(id, matchCount) {
   return db.raw(`SELECT 
@@ -117,4 +110,13 @@ ORDER BY count( * ) DESC;`);
 
 function addAnswer(answer) {
   return db("user_answers").insert(answer);
+}
+
+function updateUser(id, changes) {
+  return db("users")
+    .update(changes)
+    .where({ id })
+    .then(() => {
+      return findUserById(id);
+    });
 }

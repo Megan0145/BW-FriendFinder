@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const users = require("./users-model");
 
+//Gets all users
 router.get("/", (req, res) => {
   users
     .findUsers()
@@ -12,6 +13,7 @@ router.get("/", (req, res) => {
     });
 });
 
+//Gets current logged in user
 router.get("/current", (req, res) => {
   users
     .findUserById(req.decodedToken.subject)
@@ -27,6 +29,23 @@ router.get("/current", (req, res) => {
     });
 });
 
+router.put("/current", (req, res) => {
+  const changes = req.body;
+  users
+    .updateUser(req.decodedToken.subject, changes)
+    .then(user => {
+      res
+        .status(200)
+        .json({ message: "User updated successfully!", changes, user });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not update user: " + err.message });
+    });
+});
+
+//User messages
 router.get("/messages", (req, res) => {
   users
     .findReceivedMessagesByUserId(req.decodedToken.subject)
@@ -37,6 +56,22 @@ router.get("/messages", (req, res) => {
       res
         .status(500)
         .json({ message: "Could not get messages: " + err.message });
+    });
+});
+
+router.post("/messages", (req, res) => {
+  const sender_id = req.decodedToken.subject;
+  const { receiver_id, message } = req.body;
+  const messageBody = { sender_id, receiver_id, message };
+  users
+    .sendMessage(messageBody)
+    .then(() => {
+      res.status(200).json({ message: "Message sent successfully" });
+    })
+    .catch(err => {
+      res
+        .status(500)
+        .json({ message: "Could not send message: " + err.message });
     });
 });
 
@@ -53,6 +88,7 @@ router.get("/messages/sent", (req, res) => {
     });
 });
 
+//User questions
 router.get("/questions", async (req, res) => {
   try {
     const question = await users.findUnansweredQuestionsByUserId(
@@ -82,22 +118,7 @@ router.post("/questions", (req, res) => {
     });
 });
 
-router.post("/messages", (req, res) => {
-  const sender_id = req.decodedToken.subject;
-  const { receiver_id, message } = req.body;
-  const messageBody = { sender_id, receiver_id, message };
-  users
-    .sendMessage(messageBody)
-    .then(() => {
-      res.status(200).json({ message: "Message sent successfully" });
-    })
-    .catch(err => {
-      res
-        .status(500)
-        .json({ message: "Could not send message: " + err.message });
-    });
-});
-
+//User matches
 router.get("/matches", (req, res) => {
   const matchCount = req.body.matchCount || 1;
   users
