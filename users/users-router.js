@@ -129,7 +129,7 @@ router.post("/questions", (req, res) => {
 
 //User matches
 router.get("/matches", (req, res) => {
-  const matchCount = req.body.matchCount || 1;
+  const matchCount = req.body.matchCount || 3;
   users
     .findMatches(req.decodedToken.subject, matchCount)
     .then(matches => {
