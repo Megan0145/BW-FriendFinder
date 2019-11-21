@@ -85,7 +85,7 @@ function findQuestionAnswers(id) {
       .select('answers.*');
   }
 
-function findMatches(id) {
+function findMatches(id, matchCount) {
   return db.raw(`SELECT 
 ouA.user_id AS potentialFriendID,
 u.username,
@@ -111,7 +111,7 @@ AS ouA ON liA.question_id = ouA.question_id AND
           JOIN users as u on ouA.user_id = u.id
 GROUP BY liA.user_id,
    ouA.user_id, u.username
-HAVING count( * ) > 5
+HAVING count( * ) >= ${matchCount}
 ORDER BY count( * ) DESC;`);
 }
 

@@ -99,8 +99,9 @@ router.post("/messages", (req, res) => {
 });
 
 router.get("/matches", (req, res) => {
+  const matchCount = req.body.matchCount || 1;
   users
-    .findMatches(req.decodedToken.subject)
+    .findMatches(req.decodedToken.subject, matchCount)
     .then(matches => {
       if (process.env.DB_ENV === "production") {
         res.status(200).json(matches.rows);
