@@ -6,19 +6,22 @@ exports.up = function(knex) {
       .notNullable()
       .unsigned()
       .references("id")
-      .inTable("users");
+      .inTable("users")
+      .onDelete("CASCADE");
     tbl
       .integer("question_id")
       .notNullable()
       .unsigned()
       .references("id")
-      .inTable("questions");
+      .inTable("questions")
+      .onDelete("CASCADE");
     tbl
       .integer("answer_id")
       .unsigned()
       .notNullable()
       .references("id")
-      .inTable("answers");
+      .inTable("answers")
+      .onDelete("CASCADE");
   });
 };
 

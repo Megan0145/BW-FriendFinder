@@ -3,7 +3,7 @@ const server = require("../api/server");
 const db = require("../data/db-config");
 
 beforeEach(() => {
-  return db("users").del();
+  return db("users").truncate();
 });
 
 describe("Auth router", () => {

@@ -4,11 +4,13 @@ const db = require("../data/db-config");
 const tokenGenerator = require("../middleware/tokenGenerator");
 
 const sampleUser = { id: 1, username: "Megan", password: "1234" };
+const sampleUser2 = { id: 2, username: "Test", password: "1234" };
 const token = tokenGenerator(sampleUser);
 
 beforeEach(async () => {
-  await db("users").del();
+  await db("users").truncate();
   await db("users").insert(sampleUser);
+  await db("users").insert(sampleUser2);
 });
 
 describe("Users router", () => {

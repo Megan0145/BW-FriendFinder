@@ -8,12 +8,14 @@ exports.up = function(knex) {
           .unsigned()
           .references("id")
           .inTable("questions")
+          .onDelete("CASCADE");
         tbl
           .integer("answer_id")
           .unsigned()
           .notNullable()
           .references("id")
           .inTable("answers")
+          .onDelete("CASCADE");
       });
 };
 

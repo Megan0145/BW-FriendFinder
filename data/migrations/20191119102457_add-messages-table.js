@@ -7,13 +7,15 @@ exports.up = function(knex) {
       .notNullable()
       .unsigned()
       .references("id")
-      .inTable("users");
+      .inTable("users")
+      .onDelete("CASCADE");
     tbl
       .integer("receiver_id")
       .notNullable()
       .unsigned()
       .references("id")
-      .inTable("users");
+      .inTable("users")
+      .onDelete("CASCADE");
   });
 };
 
