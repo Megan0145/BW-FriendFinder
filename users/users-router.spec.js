@@ -124,12 +124,48 @@ describe("Users router", () => {
     });
     test("Should allow newly registered user to access questions if valid token provided", async () => {
       const login = await request(server)
-      .post("/api/auth/login")
-      .send({ username: "Megan", password: "1234" });
-      return request(server)
+        .post("/api/auth/login")
+        .send({ username: "Megan", password: "1234" });
+      const response = await request(server)
         .get("/api/users/questions")
+        .set("Authorization", JSON.parse(login.text).token);
+      expect(response.body).toEqual({
+        question_id: 1,
+        question: "What's your favorite drink tea or coffee?",
+        answers: [
+          { id: 1, answer: "tea" },
+          { id: 2, answer: "coffee" }
+        ]
+      });
+      expect(response.status).toBe(200);
+    });
+  });
+
+  describe("[POST] /questions endpoint", () => {
+    test("Should not allow user to post an answer to a question if no token provided", () => {
+      return request(server)
+        .post("/api/users/questions")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should not allow user to post an answer to a question if token provided but no request body w question id and answer id", async () => {
+      const login = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Megan", password: "1234" });
+      return request(server)
+        .post("/api/users/questions")
         .set("Authorization", JSON.parse(login.text).token)
-        .expect(200);
+        .expect(500);
+    });
+    test("Should allow user to post an answer to a question if token provided and request body valid", async () => {
+      const login = await request(server)
+        .post("/api/auth/login")
+        .send({ username: "Megan", password: "1234" });
+      const postQuestionResponse = await request(server)
+        .post("/api/users/questions")
+        .set("Authorization", JSON.parse(login.text).token)
+        .send({question_id: 1, answer_id: 1});
+      expect(postQuestionResponse.status).toBe(201);
     });
   });
 });
