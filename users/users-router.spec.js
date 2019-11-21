@@ -164,8 +164,16 @@ describe("Users router", () => {
       const postQuestionResponse = await request(server)
         .post("/api/users/questions")
         .set("Authorization", JSON.parse(login.text).token)
-        .send({question_id: 1, answer_id: 1});
+        .send({ question_id: 1, answer_id: 1 });
       expect(postQuestionResponse.status).toBe(201);
+    });
+  });
+
+  describe("[GET] / matches endpoint", () => {
+    test("Returns error 401 with no token provided", async () => {
+      await request(server)
+        .get("/api/users/matches")
+        .expect(401);
     });
   });
 });
