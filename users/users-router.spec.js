@@ -87,5 +87,12 @@ describe("Users router", () => {
         .set("Authorization", token)
         .expect(500);
     });
+    test("Should allow user to send messages if valid token & correct request body provided", async () => {
+        await request(server)
+          .post("/api/users/1/messages")
+          .set("Authorization", token)
+          .send({"receiver_id": 2, "message": "Hello user 2!"})
+          .expect(500);
+      });
   });
 });

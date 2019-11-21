@@ -12,9 +12,9 @@ router.get("/", (req, res) => {
     });
 });
 
-router.get("/:id", (req, res) => {
+router.get("/current", (req, res) => {
   users
-    .findUserById(req.params.id)
+    .findUserById(req.decodedToken.subject)
     .then(user => {
       if (user) {
         res.status(200).json(user);
@@ -27,7 +27,7 @@ router.get("/:id", (req, res) => {
     });
 });
 
-router.get("/:id/messages", (req, res) => {
+router.get("/messages", (req, res) => {
   users
     .findReceivedMessagesByUserId(req.decodedToken.subject)
     .then(messages => {
@@ -40,7 +40,7 @@ router.get("/:id/messages", (req, res) => {
     });
 });
 
-router.get("/:id/messages/sent", (req, res) => {
+router.get("/messages/sent", (req, res) => {
   users
     .findSentMessagesByUserId(req.decodedToken.subject)
     .then(messages => {
@@ -53,7 +53,7 @@ router.get("/:id/messages/sent", (req, res) => {
     });
 });
 
-router.get("/:id/questions", async (req, res) => {
+router.get("/questions", async (req, res) => {
   try {
     const question = await users.findUnansweredQuestionsByUserId(
       req.decodedToken.subject
@@ -68,7 +68,7 @@ router.get("/:id/questions", async (req, res) => {
   }
 });
 
-router.post("/:id/questions", (req, res) => {
+router.post("/questions", (req, res) => {
   const user_id = req.decodedToken.subject;
   const { question_id, answer_id } = req.body;
   const answer = { user_id, question_id, answer_id };
@@ -82,7 +82,7 @@ router.post("/:id/questions", (req, res) => {
     });
 });
 
-router.post("/:id/messages", (req, res) => {
+router.post("/messages", (req, res) => {
   const sender_id = req.decodedToken.subject;
   const { receiver_id, message } = req.body;
   const messageBody = { sender_id, receiver_id, message };
@@ -98,7 +98,7 @@ router.post("/:id/messages", (req, res) => {
     });
 });
 
-router.get("/:id/matches", (req, res) => {
+router.get("/matches", (req, res) => {
   users
     .findMatches(req.decodedToken.subject)
     .then(matches => {
