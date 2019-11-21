@@ -87,7 +87,7 @@ describe("Users router", () => {
     });
   });
 
-  describe("[POST] /messages/ endpoint", () => {
+  describe("[POST] /messages endpoint", () => {
     test("Should not allow user to send messages if no token provided", () => {
       return request(server)
         .post("/api/users/messages")
@@ -111,6 +111,24 @@ describe("Users router", () => {
         .post("/api/users/messages")
         .set("Authorization", JSON.parse(login.text).token)
         .send({ receiver_id: 2, message: "Hello user 2!" })
+        .expect(200);
+    });
+  });
+
+  describe("[GET] / questions endpoint", () => {
+    test("Should not allow user to access questions if no token provided", () => {
+      return request(server)
+        .get("/api/users/questions")
+        .expect(401)
+        .expect({ message: "You shall not pass! No credentials provided" });
+    });
+    test("Should allow newly registered user to access questions if valid token provided", async () => {
+      const login = await request(server)
+      .post("/api/auth/login")
+      .send({ username: "Megan", password: "1234" });
+      return request(server)
+        .get("/api/users/questions")
+        .set("Authorization", JSON.parse(login.text).token)
         .expect(200);
     });
   });
