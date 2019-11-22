@@ -8,7 +8,7 @@ exports.up = function(knex) {
     tbl.string("password", 128).notNullable();
     tbl.string("fname", 128);
     tbl.string("lname", 128);
-    tbl.string("avatar_url", 128);
+    tbl.text("avatar_url");
     tbl.string("DOB");
   });
 };
